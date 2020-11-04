@@ -61,11 +61,11 @@ header('Pragma: no-cache');
         </style>
     </head>
     <body>
-        <h1>LibreSpeed - Stats</h1>
+        <h1>LibreSpeed統計情報</h1>
         <?php
         if (!isset($stats_password) || $stats_password === 'PASSWORD') {
             ?>
-                Please set $stats_password in telemetry_settings.php to enable access.
+                telemetry_setting.phpに$stats_passwordを設定してください。
             <?php
         } elseif ($_SESSION['logged'] === true) {
             if ($_GET['op'] === 'logout') {
@@ -73,79 +73,79 @@ header('Pragma: no-cache');
                 ?><script type="text/javascript">window.location=location.protocol+"//"+location.host+location.pathname;</script><?php
             } else {
                 ?>
-                <form action="stats.php" method="GET"><input type="hidden" name="op" value="logout" /><input type="submit" value="Logout" /></form>
+                <form action="stats.php" method="GET"><input type="hidden" name="op" value="logout" /><input type="submit" value="ログアウト" /></form>
                 <form action="stats.php" method="GET">
-                    <h3>Search test results</h3>
+                    <h3>計測結果の検索</h3>
                     <input type="hidden" name="op" value="id" />
-                    <input type="text" name="id" id="id" placeholder="Test ID" value=""/>
-                    <input type="submit" value="Find" />
-                    <input type="submit" onclick="document.getElementById('id').value=''" value="Show last 100 tests" />
+                    <input type="text" name="id" id="id" placeholder="計測ID" value=""/>
+                    <input type="submit" value="検索" />
+                    <input type="submit" onclick="document.getElementById('id').value=''" value="最近の計測結果100件を表示" />
                 </form>
                 <?php
                 if ($_GET['op'] === 'id' && !empty($_GET['id'])) {
                     $speedtest = getSpeedtestUserById($_GET['id']);
                     $speedtests = [];
                     if (false === $speedtest) {
-                        echo '<div>There was an error trying to fetch the speedtest result for ID "'.$_GET['id'].'".</div>';
+                        echo '<div>計測結果を取得しようとしてエラーが発生しました:"'.$_GET['id'].'".</div>';
                     } elseif (null === $speedtest) {
-                        echo '<div>Could not find a speedtest result for ID "'.$_GET['id'].'".</div>';
+                        echo '<div>検索したIDが見つかりません:"'.$_GET['id'].'".</div>';
                     } else {
                         $speedtests = [$speedtest];
                     }
                 } else {
                     $speedtests = getLatestSpeedtestUsers();
                     if (false === $speedtests) {
-                        echo '<div>There was an error trying to fetch latest speedtest results.</div>';
+                        echo '<div>最新のスピードテスト結果を取得しようとしてエラーが発生しました。</div>';
                     } elseif (empty($speedtests)) {
-                        echo '<div>Could not find any speedtest results in database.</div>';
+                        echo '<div>計測結果が存在しません。</div>';
                     }
                 }
                 foreach ($speedtests as $speedtest) {
                     ?>
                     <table>
                         <tr>
-                            <th>Test ID</th>
+                            <th>計測ID</th>
                             <td><?= htmlspecialchars($speedtest['id_formatted'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Date and time</th>
+                            <th>日時</th>
                             <td><?= htmlspecialchars($speedtest['timestamp'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>IP and ISP Info</th>
+                            <th>IPアドレス/ISP情報</th>
                             <td>
                                 <?= htmlspecialchars($speedtest['ip'], ENT_HTML5, 'UTF-8') ?><br/>
                                 <?= htmlspecialchars($speedtest['ispinfo'], ENT_HTML5, 'UTF-8') ?>
                             </td>
                         </tr>
                         <tr>
-                            <th>User agent and locale</th>
+                            <th>ユーザエージェント/言語</th>
                             <td><?= htmlspecialchars($speedtest['ua'], ENT_HTML5, 'UTF-8') ?><br/>
                                 <?= htmlspecialchars($speedtest['lang'], ENT_HTML5, 'UTF-8') ?>
                             </td>
                         </tr>
                         <tr>
-                            <th>Download speed</th>
+                            <th>ダウンロード速度</th>
                             <td><?= htmlspecialchars($speedtest['dl'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Upload speed</th>
+                            <th>アップロード速度</th>
                             <td><?= htmlspecialchars($speedtest['ul'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Ping</th>
+                            <th>Ping速度</th>
                             <td><?= htmlspecialchars($speedtest['ping'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Jitter</th>
+                            <th>ジッター</th>
                             <td><?= htmlspecialchars($speedtest['jitter'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Log</th>
+                            <th>ログ</th>
                             <td><?= htmlspecialchars($speedtest['log'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                         <tr>
-                            <th>Extra info</th>
+                            <th>追加情報</th>
                             <td><?= htmlspecialchars($speedtest['extra'], ENT_HTML5, 'UTF-8') ?></td>
                         </tr>
                     </table>
@@ -159,8 +159,8 @@ header('Pragma: no-cache');
             ?>
             <form action="stats.php?op=login" method="POST">
                 <h3>Login</h3>
-                <input type="password" name="password" placeholder="Password" value=""/>
-                <input type="submit" value="Login" />
+                <input type="password" name="password" placeholder="パスワード" value=""/>
+                <input type="submit" value="ログイン" />
             </form>
             <?php
         }
